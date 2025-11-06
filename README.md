@@ -16,7 +16,7 @@ Este projeto implementa um compilador completo para uma linguagem de programaç�
 **Características principais:**
 - Expressões em notação pós-fixada: `(A B op)`
 - Operações aritméticas e relacionais
-- Estruturas de controle (`if`, `while`)
+- Estruturas de controle (`IF`, `WHILE`)
 - Comandos de memória (identificadores em maiúsculas, `RES`)
 - Aninhamento ilimitado de expressões
 - Verificação de tipos e análise semântica completa
