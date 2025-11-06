@@ -524,6 +524,8 @@ A gramática sintática aceita algumas estruturas que são validadas apenas na a
 ### 10.2 Analisador Semântico
 **Responsabilidade:** Validar contextos, tipos e inicialização
 
+```
 Valida: Todos os itens da seção 11  
 Gera: AST atribuída com tipos  
 Reporta: Erros semânticos com linha e descrição
+```
