@@ -534,8 +534,4 @@ A gramática sintática aceita algumas estruturas que são validadas apenas na a
 
 Valida: Todos os itens da seção 11  
 Gera: AST atribuída com tipos  
-Reporta: Erros semânticos com linha e descrição#   R A 3 _ 2  
- #   R A 3 _ 2  
- #   R A 3 _ 2  
- #   R A 3 _ 2  
- 
+Reporta: Erros semânticos com linha e descrição
