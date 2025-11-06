@@ -215,14 +215,6 @@ python -c "from leitor import lerTokens; from parser import parsear, construirGr
 | `readme.md` | Este arquivo - Instruções completas |
 | `atributos.md` | Gramática de atributos da linguagem |
 
-### Arquivos de Teste
-
-| Arquivo | Descrição | Conteúdo |
-|---------|-----------|----------|
-| `teste1.txt` | Teste básico | Operações aritméticas simples |
-| `teste2.txt` | Teste intermediário | Estruturas de controle e memória |
-| `teste3.txt` | Teste avançado | Aninhamento complexo e todos os recursos |
-
 ---
 
 ## 2. Símbolos Terminais
@@ -260,8 +252,8 @@ python -c "from leitor import lerTokens; from parser import parsear, construirGr
 | `num`   | N/A | Literal numérico (int ou real) |
 | `id`    | N/A | Identificador em MAIÚSCULAS (ex: `X`, `MEM`, `CONTADOR`) |
 | `res`   | `RES` | Keyword para histórico (sempre maiúsculo) |
-| `if`    | `if` | Keyword condicional (minúsculo) |
-| `while` | `while` | Keyword laço (minúsculo) |
+| `if`    | `if` | Keyword condicional |
+| `while` | `while` | Keyword laço |
 | `eof`   | N/A | Fim de arquivo |
 
 **Nota Importante:** 
@@ -529,7 +521,7 @@ A gramática sintática aceita algumas estruturas que são validadas apenas na a
 ((I 10 <) ((I 1 +) I) while) ->  Sintaxe OK (laço)
 ```
 
-### 12.2 Analisador Semântico
+### 10.2 Analisador Semântico
 **Responsabilidade:** Validar contextos, tipos e inicialização
 
 Valida: Todos os itens da seção 11  
