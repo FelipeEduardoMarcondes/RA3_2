@@ -369,6 +369,7 @@ def construirTabelaLL1(gramatica, first, follow):
                 for terminal in follow[A]:
                     if terminal in table[A]:
                         raise ValueError(f"Conflito LL(1) em ({A}, {terminal}) para epsilon")
+                    
                     table[A][terminal] = ['epsilon']
     
     return table

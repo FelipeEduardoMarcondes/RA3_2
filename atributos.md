@@ -586,7 +586,7 @@ Derivação:
 1. Γ ⊢ 10.0 : real      (literal)
 2. Γ ⊢ 3 : int          (literal)
 3. Operador / requer: int, int
-4. real ≠ int           ❌ ERRO
+4. real ≠ int            ERRO
 
 ERRO SEMÂNTICO: Operador '/' requer operandos inteiros,
                 encontrado 'real' e 'int'

@@ -238,6 +238,7 @@ def inferirTipoNode(node, tabela_simbolos, erros, linha_atual):
             erros.append(f"ERRO SEMÂNTICO [Linha {linha_atual}]: "
                          f"Operador aritmético não aceita operandos booleanos\n"
                          f"Contexto: ({tipo1} {tipo2} {node_type})")
+            
             return None
         
         return promoverTipo(tipo1, tipo2)
@@ -257,6 +258,7 @@ def inferirTipoNode(node, tabela_simbolos, erros, linha_atual):
         node['children'][1]['tipo_inferido'] = tipo2
         
         if tipo1 is None or tipo2 is None:
+
             return None
         
         if tipo1 != 'int' or tipo2 != 'int':
@@ -285,6 +287,7 @@ def inferirTipoNode(node, tabela_simbolos, erros, linha_atual):
         if len(node['children']) < 2:
             erros.append(f"ERRO SEMÂNTICO [Linha {linha_atual}]: "
                         f"Operador '|' requer 2 operandos")
+            
             return None
         
         tipo1 = inferirTipoNode(node['children'][0], tabela_simbolos, erros, linha_atual)
@@ -468,13 +471,11 @@ def analisarSemantica(ast_list, tabela_simbolos):
         
         if tipo is not None:
             tabelaAdicionarHistorico(tabela_simbolos, tipo, None, linha_num)
+
         else:
             tabelaAdicionarHistorico(tabela_simbolos, None, None, linha_num)
     
-    
     return arvore_atribuida, erros
-
-
 
 def gerarProcessoInferencia(node):
     """
@@ -483,11 +484,11 @@ def gerarProcessoInferencia(node):
     """
     inferences = []
     
-    # 1. Visita filhos primeiro (recursão)
+    # Visita filhos primeiro (recursão)
     for child in node.get('children', []):
         inferences.extend(gerarProcessoInferencia(child))
         
-    # 2. Processa o nó atual (visita)
+    # Processa o nó atual (visita)
     tipo_resultado = node.get('tipo_inferido', 'ERRO')
     descricao_no = f"Nó '{node['type']}'"
     if node['value'] is not None:
@@ -499,42 +500,51 @@ def gerarProcessoInferencia(node):
     
     if node['type'] == 'num':
         justificativa = f"Regra 2.1 (Literal) -> {tipo_resultado}"
+
     elif node['type'] == 'id':
         justificativa = f"Regra 2.2 (Identificador) -> {tipo_resultado}"
+
     elif node['type'] in ['plus', 'minus', 'mult', 'div_real']:
         justificativa = f"Regra 2.3 (Aritmética) com ({', '.join(tipos_filhos)}) -> {tipo_resultado}"
+
     elif node['type'] in ['div_int', 'mod']:
         justificativa = f"Regra 2.4 (Div/Mod) com ({', '.join(tipos_filhos)}) -> {tipo_resultado}"
+
     elif node['type'] == 'pow':
         justificativa = f"Regra 2.5 (Potência) com ({', '.join(tipos_filhos)}) -> {tipo_resultado}"
+
     elif node['type'] in ['lt', 'gt', 'lte', 'gte', 'eq', 'neq']:
         justificativa = f"Regra 2.6 (Relacional) com ({', '.join(tipos_filhos)}) -> {tipo_resultado}"
+
     elif node['type'] == 'store':
         val_node = node['children'][0]
         id_node = node['children'][1]
         justificativa = f"Regra 2.7 (Armazenamento) de '{val_node.get('tipo_inferido', '?')}' em '{id_node.get('value', '?')}' -> {tipo_resultado}"
+
     elif node['type'] == 'res':
         n_node = node['children'][0]
         justificativa = f"Regra 2.8 (Histórico) com N='{n_node.get('tipo_inferido', '?')}' -> {tipo_resultado}"
+    
     elif node['type'] == 'if':
         justificativa = f"Regra 2.9 (Condicional) com (cond:{tipos_filhos[0]}, then:{tipos_filhos[1]}, else:{tipos_filhos[2]}) -> {tipo_resultado}"
+    
     elif node['type'] == 'while':
         justificativa = f"Regra 2.10 (Laço) com (cond:{tipos_filhos[0]}, body:{tipos_filhos[1]}) -> {tipo_resultado}"
     
     inferences.append(f"{descricao_no}: {justificativa}")
+    
     return inferences
 
 def descreverRegraFormal(node):
-    """
-    Retorna uma string formatada da regra formal (de atributos.md)
-    aplicada a este nó.
-    """
+    # Retorna uma string formatada da regra formal aplicada a este nó.
+
     tipo_res = node.get('tipo_inferido', 'ERRO')
     children = node.get('children', [])
     
     if node['type'] == 'num':
         regra = f"**Regra 2.1: Literal**\n"
         regra += f"```\nΓ ⊢ {node['value']} : {tipo_res}\n```\n"
+
         return regra
         
     if node['type'] == 'id':
@@ -543,6 +553,7 @@ def descreverRegraFormal(node):
         regra += f"──────────────────────────────────────────────\n"
         regra += f"Γ ⊢ {node['value']} : {tipo_res}\n```\n"
         return regra
+    
 
     if node['type'] == 'store':
         t_val = children[0]['tipo_inferido']
@@ -551,6 +562,7 @@ def descreverRegraFormal(node):
         regra += f"```\nΓ ⊢ e₁ : {t_val}    T ∈ {{int, real}}\n"
         regra += f"──────────────────────────────────────────────────\n"
         regra += f"Γ[{id_name} ↦ {{tipo: {t_val}}}] ⊢ (e₁ {id_name}) : {tipo_res}\n```\n"
+
         return regra
         
     if node['type'] == 'res':
@@ -561,6 +573,7 @@ def descreverRegraFormal(node):
         regra += f"────────────────────────────────────────────────────────\n"
         regra += f"Γ ⊢ (e₁ RES) : {tipo_res}\n```\n"
         regra += f"Contexto: N = {n_val}\n"
+
         return regra
 
     if node['type'] in ['plus', 'minus', 'mult', 'div_real']:
@@ -572,6 +585,7 @@ def descreverRegraFormal(node):
         regra += f"```\nΓ ⊢ e₁ : {t1}    Γ ⊢ e₂ : {t2}\n"
         regra += f"────────────────────────────────────────────────\n"
         regra += f"Γ ⊢ (e₁ e₂ {op}) : promover_tipo({t1}, {t2}) = {tipo_res}\n```\n"
+
         return regra
         
     if node['type'] in ['div_int', 'mod']:
@@ -583,6 +597,7 @@ def descreverRegraFormal(node):
         regra += f"────────────────────────────────────────────────\n"
         regra += f"Γ ⊢ (e₁ e₂ {op}) : {tipo_res}\n```\n"
         regra += f"**Restrição:** {t1} == int, {t2} == int\n"
+
         return regra
 
     if node['type'] == 'pow':
@@ -593,6 +608,7 @@ def descreverRegraFormal(node):
         regra += f"────────────────────────────────────────────────\n"
         regra += f"Γ ⊢ (e₁ e₂ ^) : {tipo_res}\n```\n"
         regra += f"**Restrição:** {t_exp} == int, e₂.valor > 0\n"
+
         return regra
         
     if node['type'] in ['lt', 'gt', 'lte', 'gte', 'eq', 'neq']:
@@ -608,6 +624,7 @@ def descreverRegraFormal(node):
         regra += f"────────────────────────────────────────────────\n"
         regra += f"Γ ⊢ (e₁ e₂ {op}) : {tipo_res}\n```\n"
         regra += f"**Restrição:** {t1}, {t2} ∈ {{int, real}}\n"
+
         return regra
 
     if node['type'] == 'if':
@@ -619,6 +636,7 @@ def descreverRegraFormal(node):
         regra += f"─────────────────────────────────────────────────────\n"
         regra += f"Γ ⊢ (e₁ e₂ e₃ if) : {tipo_res}\n```\n"
         regra += f"**Restrições:** {t_cond} == booleano, {t_then} == {t_else}\n"
+
         return regra
         
     if node['type'] == 'while':
@@ -629,6 +647,7 @@ def descreverRegraFormal(node):
         regra += f"─────────────────────────────────────\n"
         regra += f"Γ ⊢ (e₁ e₂ while) : {tipo_res}\n```\n"
         regra += f"**Restrição:** {t_cond} == booleano\n"
+
         return regra
 
     return f"**Regra não documentada para:** {node['type']}\n"
@@ -657,6 +676,7 @@ def gerarRelatorioTipos(arvore_atribuida, filename='julgamento_tipos.md'):
             f.write("\n### Regra de Dedução Formal (Nó Raiz)\n\n")
             try:
                 f.write(descreverRegraFormal(ast))
+                
             except Exception as e:
                 f.write(f"Erro ao gerar regra formal: {e}\n")
             
