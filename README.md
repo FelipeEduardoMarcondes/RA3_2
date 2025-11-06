@@ -537,4 +537,5 @@ Gera: AST atribuída com tipos
 Reporta: Erros semânticos com linha e descrição#   R A 3 _ 2  
  #   R A 3 _ 2  
  #   R A 3 _ 2  
+ #   R A 3 _ 2  
  
