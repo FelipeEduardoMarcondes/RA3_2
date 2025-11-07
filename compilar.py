@@ -9,7 +9,7 @@ import os
 from leitor import lerTokens
 from parser import parsear, construirGramatica, calcularFirst, calcularFollow, construirTabelaLL1
 from semantico import (
-    inicializarTabelaSimbolos,  # CORRIGIDO (era criarTabelaSimbolos)
+    inicializarTabelaSimbolos,
     definirGramaticaAtributos,
     analisarSemantica,
     gerarArvoreAtribuida,
@@ -27,7 +27,6 @@ def imprimirArvore(node, indent=0, prefix=""):
     if 'tipo_inferido' in node and node['tipo_inferido']:
         tipo_info = f" : {node['tipo_inferido']}"
     
-    # CORRIGIDO (espaço invisível U+00A0 removido)
     print("  " * indent + prefix + node['type'] + tipo_info, end="")
 
     if node['value'] is not None:
@@ -208,7 +207,7 @@ def main():
         if erros_sintaticos:
             print(f"{len(erros_sintaticos)} erro(s) sintático(s) encontrado(s):")
             for erro in erros_sintaticos:
-                print(f"  - {erro}") # CORRIGIDO (espaço invisível U+00A0 removido)
+                print(f"  - {erro}")
             print("\nCompilação interrompida devido a erros sintáticos.")
             sys.exit(1)
         
@@ -219,7 +218,6 @@ def main():
         
         gramatica_atributos = definirGramaticaAtributos()
         
-        # CORRIGIDO: Usa a função com o nome correto de semantico.py
         tabela_simbolos = inicializarTabelaSimbolos() 
         arvore_anotada, erros_semanticos = analisarSemantica(ast_list, tabela_simbolos)
         
@@ -274,7 +272,6 @@ def main():
         print("\n" + "=" * 60)
         print("RESUMO DA COMPILAÇÃO")
         print("=" * 60)
-        # CORRIGIDO (espaços invisíveis U+00A0 removidos)
         print(f"Tokens processados:      {num_tokens}")
         print(f"Expressões analisadas:   {len(ast_list)}")
         print(f"Variáveis declaradas:    {len(tabela_simbolos['simbolos'])}") 

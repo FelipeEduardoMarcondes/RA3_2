@@ -478,19 +478,17 @@ def analisarSemantica(ast_list, tabela_simbolos):
     return arvore_atribuida, erros
 
 def gerarProcessoInferencia(node):
-    """
-    Helper recursivo (pós-ordem) para construir a lista de inferência
-    bottom-up.
-    """
+    # Helper recursivo (pós-ordem) para construir a lista de inferência bottom-up.
     inferences = []
     
-    # Visita filhos primeiro (recursão)
+    # Visita filhos primeiro
     for child in node.get('children', []):
         inferences.extend(gerarProcessoInferencia(child))
         
-    # Processa o nó atual (visita)
+    # Processa o nó atual
     tipo_resultado = node.get('tipo_inferido', 'ERRO')
     descricao_no = f"Nó '{node['type']}'"
+
     if node['value'] is not None:
         descricao_no += f" (Valor: {node['value']})"
     
@@ -663,7 +661,7 @@ def gerarRelatorioTipos(arvore_atribuida, filename='julgamento_tipos.md'):
             f.write(f"---\n\n## Linha {linha_num}\n\n")
             f.write(f"**Tipo Inferido Final:** `{ast.get('tipo_inferido', 'ERRO')}`\n\n")
             
-            # 1. Processo de Inferência
+            # Processo de Inferência
             f.write("### Processo de Inferência (Bottom-Up)\n\n")
             try:
                 inferencias = gerarProcessoInferencia(ast)
@@ -672,7 +670,7 @@ def gerarRelatorioTipos(arvore_atribuida, filename='julgamento_tipos.md'):
             except Exception as e:
                 f.write(f"Erro ao gerar processo de inferência: {e}\n")
             
-            # 2. Regra Formal Aplicada (do Nó Raiz)
+            # Regra Formal Aplicada (do Nó Raiz)
             f.write("\n### Regra de Dedução Formal (Nó Raiz)\n\n")
             try:
                 f.write(descreverRegraFormal(ast))
