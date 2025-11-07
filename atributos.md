@@ -461,10 +461,10 @@ Onde:
 
 ---
 
-## 3. Função promover_tipo
+## 3. Função promoverTipo
 
 ```python
-def promover_tipo(tipo1, tipo2):
+def promoverTipo(tipo1, tipo2):
     """
     Promove tipos em operações mistas.
     
