@@ -1,18 +1,18 @@
 # semantico.py
 # FELIPE EDUARDO MARCONDES
 # GRUPO 2
-# VERSÃO CORRIGIDA (RELATÓRIOS DETALHADOS)
+
 import json
 
 
-def criarTabelaSimbolos():
+def inicializarTabelaSimbolos():
     # Inicializa e retorna uma nova estrutura de tabela de símbolos.
     return {
         'simbolos': {},  # {nome: {tipo, valor, inicializada, linha}}
         'historico': []  # [{tipo, valor, linha}]
     }
 
-def tabelaAdicionar(tabela, nome, tipo, valor, linha):
+def adicionarSimbolo(tabela, nome, tipo, valor, linha):
     # Adiciona ou atualiza uma variável na tabela.
     tabela['simbolos'][nome] = {
         'tipo': tipo,
@@ -22,7 +22,7 @@ def tabelaAdicionar(tabela, nome, tipo, valor, linha):
     }
     
 
-def tabelaBuscar(tabela, nome):
+def buscarSimbolo(tabela, nome):
     # Busca uma variável na tabela.
     return tabela['simbolos'].get(nome)
 
@@ -32,11 +32,11 @@ def tabelaEstaInicializada(tabela, nome):
 
     return simbolo and simbolo.get('inicializada', False)
 
-def tabelaAdicionarHistorico(tabela, tipo, valor, linha):
+def adicionarSimboloHistorico(tabela, tipo, valor, linha):
     # Adiciona resultado ao histórico de expressões.
     tabela['historico'].append({'tipo': tipo, 'valor': valor, 'linha': linha})
 
-def tabelaBuscarHistorico(tabela, n):
+def buscarSimboloHistorico(tabela, n):
     # Busca resultado N linhas anteriores
     # N=1 significa linha imediatamente anterior
     # N deve estar entre 1 e len(historico)
@@ -105,7 +105,7 @@ def inferirTipoNode(node, tabela_simbolos, erros, linha_atual):
     # ========== IDENTIFICADORES (RECUPERAÇÃO) ==========
     if node_type == 'id':
         nome = node['value']
-        simbolo = tabelaBuscar(tabela_simbolos, nome)
+        simbolo = buscarSimbolo(tabela_simbolos, nome)
         
         if not simbolo:
             erros.append(f"ERRO SEMÂNTICO [Linha {linha_atual}]: "
@@ -163,7 +163,7 @@ def inferirTipoNode(node, tabela_simbolos, erros, linha_atual):
                 return None
             
             # Busca o tipo real do histórico
-            historico_entry = tabelaBuscarHistorico(tabela_simbolos, n)
+            historico_entry = buscarSimboloHistorico(tabela_simbolos, n)
             if historico_entry and historico_entry['tipo']:
 
                 return historico_entry['tipo']
@@ -214,7 +214,7 @@ def inferirTipoNode(node, tabela_simbolos, erros, linha_atual):
         
         nome = id_node['value']
         
-        tabelaAdicionar(tabela_simbolos, nome, tipo_valor, None, linha_atual)
+        adicionarSimbolo(tabela_simbolos, nome, tipo_valor, None, linha_atual)
         
         return tipo_valor
 
@@ -470,10 +470,10 @@ def analisarSemantica(ast_list, tabela_simbolos):
         arvore_atribuida.append((linha_num, ast))
         
         if tipo is not None:
-            tabelaAdicionarHistorico(tabela_simbolos, tipo, None, linha_num)
+            adicionarSimboloHistorico(tabela_simbolos, tipo, None, linha_num)
 
         else:
-            tabelaAdicionarHistorico(tabela_simbolos, None, None, linha_num)
+            adicionarSimboloHistorico(tabela_simbolos, None, None, linha_num)
     
     return arvore_atribuida, erros
 
@@ -676,7 +676,7 @@ def gerarRelatorioTipos(arvore_atribuida, filename='julgamento_tipos.md'):
             f.write("\n### Regra de Dedução Formal (Nó Raiz)\n\n")
             try:
                 f.write(descreverRegraFormal(ast))
-                
+
             except Exception as e:
                 f.write(f"Erro ao gerar regra formal: {e}\n")
             
